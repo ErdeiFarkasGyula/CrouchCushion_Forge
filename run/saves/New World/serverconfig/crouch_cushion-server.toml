@@ -1,0 +1,7 @@
+#The minimum multiplier applied to fall damage when timed perfectly (0.0 = 0% damage, 1.0 = 100% damage)
+#Range: 0.0 ~ 1.0
+min_damage_multiplier = 0.25
+#The window of time (in ticks) the player must have been crouching for the cushion to take effect. If the player crouches longer than this, the effect fades.
+#Range: 1 ~ 100
+cushion_window_ticks = 20
+
