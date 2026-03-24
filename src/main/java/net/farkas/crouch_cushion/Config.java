@@ -29,7 +29,7 @@ public class Config {
         CUSHION_WINDOW_TICKS = BUILDER
                 .comment("The window of time (in ticks) the player must have been crouching for the cushion to take effect. " +
                         "If the player crouches longer than this, the effect fades.")
-                .defineInRange("cushion_window_ticks", 20, 1, 100);
+                .defineInRange("cushion_window_ticks", 10, 1, 100);
 
         BUILDER.pop();
         BUILDER.push("Scaling");
