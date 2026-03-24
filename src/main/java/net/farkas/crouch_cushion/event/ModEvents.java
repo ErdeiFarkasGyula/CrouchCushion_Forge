@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = CrouchCushion.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ModForgeEvents {
+public class ModEvents {
     private static final String CROUCH_START_TIME_TAG = "crouch_cushion_start_time";
 
     @SubscribeEvent
