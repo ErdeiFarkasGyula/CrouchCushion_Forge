@@ -11,12 +11,11 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = CrouchCushion.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModForgeEvents {
-
     private static final String CROUCH_START_TIME_TAG = "crouch_cushion_start_time";
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!Config.ENABLE_CUSHION.get()) return;
+        if (!Config.enableCushion) return;
 
         if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide()) {
             Player player = event.player;
@@ -35,7 +34,7 @@ public class ModForgeEvents {
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
-        if (!Config.ENABLE_CUSHION.get()) return;
+        if (!Config.enableCushion) return;
 
         if (event.getEntity() instanceof Player player && !player.level().isClientSide()) {
             if (event.getSource().is(DamageTypes.FALL) && player.isCrouching()) {
@@ -43,24 +42,38 @@ public class ModForgeEvents {
                     long startTime = player.getPersistentData().getLong(CROUCH_START_TIME_TAG);
                     long currentTime = player.level().getGameTime();
                     long duration = currentTime - startTime;
-                    int window = Config.CUSHION_WINDOW_TICKS.get();
+                    int window = Config.cushionWindowTicks;
+
+                    CrouchCushion.LOGGER.info("Window: " + window);
 
                     if (duration <= window) {
-                        double minMultiplier = Config.MIN_DAMAGE_MULTIPLIER.get();
+                        double minMultiplier = Config.minDamageMultiplier;
 
                         double baseMultiplier = minMultiplier;
-                        if (Config.ENABLE_FALL_DISTANCE_SCALING.get()) {
-                            baseMultiplier += player.fallDistance * Config.FALL_DISTANCE_SCALING_FACTOR.get();
+
+                        CrouchCushion.LOGGER.info("BaseMult0: " + baseMultiplier);
+
+                        if (Config.enableFallDistanceScaling) {
+                            baseMultiplier += player.fallDistance * Config.fallDistanceScalingFactor;
                         }
+
+                        CrouchCushion.LOGGER.info("BaseMult1: " + baseMultiplier);
 
                         baseMultiplier = Math.min(1.0, baseMultiplier);
 
                         double progress = (double) duration / (double) window;
+
+                        CrouchCushion.LOGGER.info("Progress: " + progress);
+
                         double finalMultiplier = baseMultiplier + (1.0 - baseMultiplier) * progress;
+
+                        CrouchCushion.LOGGER.info("FinalMult: " + finalMultiplier);
 
                         finalMultiplier = Math.max(0.0, Math.min(1.0, finalMultiplier));
 
                         event.setAmount((float) (event.getAmount() * finalMultiplier));
+
+                        CrouchCushion.LOGGER.info("FinalDamage: " + event.getAmount());
                     }
                 }
             }
