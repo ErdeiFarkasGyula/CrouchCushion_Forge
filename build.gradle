@@ -207,3 +207,9 @@ tasks.named('jar', Jar).configure {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+
+tasks.jar {
+    archiveBaseName.set("crouch_cushion")
+    archiveVersion.set(mod_version)
+    archiveClassifier.set("forge-${minecraft_version}")
+}
